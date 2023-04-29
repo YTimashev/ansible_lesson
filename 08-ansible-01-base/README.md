@@ -3,7 +3,7 @@
 ## Подготовка к выполнению
 
 1. Установите Ansible версии 2.10 или выше.
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible$ ansible --version
 ansible [core 2.14.4]
 ```
@@ -16,7 +16,7 @@ ansible [core 2.14.4]
 ## Основная часть
 
 1. Попробуйте запустить playbook на окружении из `test.yml`, зафиксируйте значение, которое имеет факт `some_fact` для указанного хоста при выполнении playbook.
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-playbook site.yml -i ./inventory/test.yml 
 
 PLAY [Print os facts] **********************************************************
@@ -39,7 +39,7 @@ localhost                  : ok=3    changed=0    unreachable=0    failed=0    s
 ```
 2. Найдите файл с переменными (group_vars), в котором задаётся найденное в первом пункте значение, и поменяйте его на `all default fact`.
   >Поиск файла с переменными
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-inventory -i ./inventory/test.yml --list
 {
     "_meta": {
@@ -65,7 +65,7 @@ tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-invent
 ```
 
   >После смены значения
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-inventory -i ./inventory/test.yml --list
 {
     "_meta": {
@@ -93,7 +93,7 @@ tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-invent
 3. Воспользуйтесь подготовленным (используется `docker`) или создайте собственное окружение для проведения дальнейших испытаний.
 
   >Создаем окружение
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ docker ps
 CONTAINER ID   IMAGE                 COMMAND           CREATED              STATUS              PORTS     NAMES
 398615b34704   pycontribs/ubuntu     "sleep 6000000"   32 seconds ago       Up 29 seconds                 ubuntu
@@ -101,7 +101,7 @@ e2a6883a4361   pycontribs/centos:7   "sleep 6000000"   About a minute ago   Up A
 ```
 
 4. Проведите запуск playbook на окружении из `prod.yml`. Зафиксируйте полученные значения `some_fact` для каждого из `managed host`.
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-playbook site.yml -i ./inventory/prod.yml 
 
 PLAY [Print os facts] **********************************************************
@@ -132,7 +132,7 @@ ubuntu                     : ok=3    changed=0    unreachable=0    failed=0    s
 ```
 
 5. Добавьте факты в `group_vars` каждой из групп хостов так, чтобы для `some_fact` получились значения: для `deb` — `deb default fact`, для `el` — `el default fact`.
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-inventory -i ./inventory/prod.yml --list
 {
     "_meta": {
@@ -168,7 +168,7 @@ tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-invent
 ```
 
 6.  Повторите запуск playbook на окружении `prod.yml`. Убедитесь, что выдаются корректные значения для всех хостов.
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-playbook site.yml -i ./inventory/prod.yml 
 
 PLAY [Print os facts] **********************************************************
@@ -199,7 +199,7 @@ ubuntu                     : ok=3    changed=0    unreachable=0    failed=0    s
 ```
 
 7. При помощи `ansible-vault` зашифруйте факты в `group_vars/deb` и `group_vars/el` с паролем `netology`.
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-vault encrypt group_vars/deb/examp.yml 
 New Vault password: 
 Confirm New Vault password: 
@@ -212,7 +212,7 @@ Encryption successful
 ```
 
 8. Запустите playbook на окружении `prod.yml`. При запуске `ansible` должен запросить у вас пароль. Убедитесь в работоспособности.
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-playbook site.yml -i ./inventory/prod.yml --ask-vault-pass
 Vault password: 
 
@@ -269,7 +269,7 @@ local:
 ```
 
 11. Запустите playbook на окружении `prod.yml`. При запуске `ansible` должен запросить у вас пароль. Убедитесь, что факты `some_fact` для каждого из хостов определены из верных `group_vars`.
-```
+```bash
 tim@tim:~/nl/devops-netology/ansible/08-ansible-01-base/playbook$ ansible-playbook site.yml -i ./inventory/prod.yml --ask-vault-pass
 Vault password: 
 
@@ -309,6 +309,8 @@ ubuntu                     : ok=3    changed=0    unreachable=0    failed=0    s
 ```
 
 12. Заполните `README.md` ответами на вопросы. Сделайте `git push` в ветку `master`. В ответе отправьте ссылку на ваш открытый репозиторий с изменённым `playbook` и заполненным `README.md`.
+
+  >[README.md](https://github.com/YTimashev/ansible_lesson/tree/main/08-ansible-01-base)
 
 ## Необязательная часть
 
