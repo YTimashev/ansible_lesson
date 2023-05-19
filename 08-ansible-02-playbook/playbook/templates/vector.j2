@@ -1,0 +1,24 @@
+[sources.dummy_logs]
+type = "demo_logs"
+format = "syslog"
+interval = 1
+
+[transforms.parse_logs]
+type = "remap"
+inputs = ["dummy_logs"]
+source = '''
+. = parse_syslog!(string!(.message))
+'''
+
+[sinks.print]
+type = "console"
+inputs = ["parse_logs"]
+encoding.codec = "json"
+
+[sinks.my_sink_id]
+type = "clickhouse"
+inputs = [ "parse_logs" ]
+database = "logs"
+endpoint = "http://localhost:8123"
+table = "logstable"
+compression = "gzip"
