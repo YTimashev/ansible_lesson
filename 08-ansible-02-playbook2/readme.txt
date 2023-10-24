@@ -1,1 +1,0 @@
-повторение данного урока - https://github.com/ArtemShtepa/devops-netology/blob/main/homework/8.2/README.md
