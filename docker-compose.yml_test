@@ -1,0 +1,15 @@
+docker-compose.yml
+
+version: '3'
+services:
+  clickhouse:
+    image: pycontribs/centos:7
+    container_name: clickhouse-01
+    restart: unless-stopped
+    entrypoint: "sleep infinity"
+
+  ubuntu:
+    image: pycontribs/ubuntu
+    container_name: ubuntu
+    restart: unless-stopped
+    entrypoint: "sleep infinity"
