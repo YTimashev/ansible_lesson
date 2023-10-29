@@ -82,7 +82,7 @@ external_ip_address_vector = "158.160.104.18"
 ```
 
 4. Подготовьте свой inventory-файл `prod.yml`.
->  [Ссылка на inventory-файл `prod.yml`](inventory/prod.yml)
+>  [Ссылка на inventory-файл prod.yml](https://github.com/YTimashev/ansible_lesson/blob/main/08-ansible-03-yandex/playbook/inventory/prod.yml)
 5. Запустите `ansible-lint site.yml` и исправьте ошибки, если они есть.
 >  После исправления ошибок (пустые строки, отстутсвие пробелов, кавычек, установки прав доступа) получили следующий результат:
 ```bash
@@ -96,7 +96,7 @@ tim@tim:~/nl/devops-netology/ansible/08-ansible-03-yandex/playbook$
 7. Запустите playbook на `prod.yml` окружении с флагом `--diff`. Убедитесь, что изменения на системе произведены.
 >  [ansible-playbook -i inventory/prod.yml site.yml --diff](src2/diff.md)
 8. Повторно запустите playbook с флагом `--diff` и убедитесь, что playbook идемпотентен.
->  Повторно [ansible-playbook -i inventory/prod.yml site.yml --check](src2/check.md)
+>  Повторно [ansible-playbook -i inventory/prod.yml site.yml --diff](src2/check.md)
 >  Playbook идемпотентен.
 9. Подготовьте README.md-файл по своему playbook. В нём должно быть описано: что делает playbook, какие у него есть параметры и теги.
 10. Готовый playbook выложите в свой репозиторий, поставьте тег `08-ansible-03-yandex` на фиксирующий коммит, в ответ предоставьте ссылку на него.
