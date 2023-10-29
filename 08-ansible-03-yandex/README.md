@@ -3,7 +3,7 @@
 ## Подготовка к выполнению
 
 1. Подготовьте в Yandex Cloud три хоста: для `clickhouse`, для `vector` и для `lighthouse`.
->  Инфраструктура из трех хостов (centos-7) в Yandex Cloud развернута при помощи Terraform - [ссылка на код](src)
+>  Инфраструктура из трех хостов в Yandex Cloud развернута при помощи Terraform - [ссылка на код](src)
 ```
 Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 
@@ -92,15 +92,15 @@ Passed: 0 failure(s), 0 warning(s) on 1 files. Last profile that met the validat
 tim@tim:~/nl/devops-netology/ansible/08-ansible-03-yandex/playbook$ 
 ```
 6. Попробуйте запустить playbook на этом окружении с флагом `--check`.
->  [ansible-playbook -i inventory/prod.yml site.yml --check](src2/check.md)
+>  [ansible-playbook -i inventory/prod.yml site.yml --check](playbook/src2/check.md)
 7. Запустите playbook на `prod.yml` окружении с флагом `--diff`. Убедитесь, что изменения на системе произведены.
->  [ansible-playbook -i inventory/prod.yml site.yml --diff](src2/diff.md)
+>  [ansible-playbook -i inventory/prod.yml site.yml --diff](playbook/src2/diff.md)
 8. Повторно запустите playbook с флагом `--diff` и убедитесь, что playbook идемпотентен.
->  Повторно [ansible-playbook -i inventory/prod.yml site.yml --diff](src2/check.md)
+>  Повторно [ansible-playbook -i inventory/prod.yml site.yml --diff](playbook/src2/2diff.md)
 >  Playbook идемпотентен.
 9. Подготовьте README.md-файл по своему playbook. В нём должно быть описано: что делает playbook, какие у него есть параметры и теги.
 10. Готовый playbook выложите в свой репозиторий, поставьте тег `08-ansible-03-yandex` на фиксирующий коммит, в ответ предоставьте ссылку на него.
->  
+>  [Playbook 08-ansible-03-yandex](hhh)
 ---
 
 ### Как оформить решение задания
