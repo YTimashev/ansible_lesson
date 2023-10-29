@@ -100,7 +100,7 @@ tim@tim:~/nl/devops-netology/ansible/08-ansible-03-yandex/playbook$
 >  Playbook идемпотентен.
 9. Подготовьте README.md-файл по своему playbook. В нём должно быть описано: что делает playbook, какие у него есть параметры и теги.
 10. Готовый playbook выложите в свой репозиторий, поставьте тег `08-ansible-03-yandex` на фиксирующий коммит, в ответ предоставьте ссылку на него.
->  [Playbook 08-ansible-03-yandex](hhh)
+>  [Playbook 08-ansible-03-yandex](https://github.com/YTimashev/ansible_lesson/tree/main/08-ansible-03-yandex/playbook)
 ---
 
 ### Как оформить решение задания
