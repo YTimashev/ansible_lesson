@@ -3,7 +3,7 @@
 ## Подготовка к выполнению
 
 1. Подготовьте в Yandex Cloud три хоста: для `clickhouse`, для `vector` и для `lighthouse`.
->  Инфраструктура из трех хостов (centos-7) в Yandex Cloud развернута при помощи Terraform - [ссылка на код](08-ansible-03-yandex/src)
+>  Инфраструктура из трех хостов (centos-7) в Yandex Cloud развернута при помощи Terraform - [ссылка на код](src)
 ```
 Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
 
