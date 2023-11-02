@@ -2,18 +2,9 @@
 
 ## Подготовка к выполнению
 
-1. * Необязательно. Познакомьтесь с [LightHouse](https://youtu.be/ymlrNlaHzIY?t=929).
-2. Создайте два пустых публичных репозитория в любом своём проекте: vector-role и lighthouse-role.
- >Репозитории: [vector-role ](https://github.com/YTimashev/vector-role.git) и [lighthouse-role](https://github.com/YTimashev/lighthouse-role.git)
-3. Добавьте публичную часть своего ключа к своему профилю на GitHub.
-
-## Основная часть
-
-Ваша цель — разбить ваш playbook на отдельные roles. 
-
-Задача — сделать roles для ClickHouse, Vector и LightHouse и написать playbook для использования этих ролей. 
-
-Ожидаемый результат — существуют три ваших репозитория: два с roles и один с playbook.
+1. Созданы два пустых публичных репозитория: vector-role и lighthouse-role.
+ > Репозитории: [vector-role ](https://github.com/YTimashev/vector-role.git) и [lighthouse-role](https://github.com/YTimashev/lighthouse-role.git)
+2. Создана инфраструктура из трех хостов в Yandex Cloud при помощи Terraform 
 
 **Что сделано**
 
