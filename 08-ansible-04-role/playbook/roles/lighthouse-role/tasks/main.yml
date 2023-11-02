@@ -10,7 +10,7 @@
 
 - name: Get lighthouse distrib
   ansible.builtin.get_url:
-    url: "https://github.com/VKCOM/lighthouse/archive/refs/heads/master.zip"
+    url: "{{ lighthouse_src }}"
     dest: "./lighthouse.zip"
     mode: "0644"
 - name: Unarchive lighthouse distrib into nginx

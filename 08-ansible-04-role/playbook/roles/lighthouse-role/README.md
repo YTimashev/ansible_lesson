@@ -1,38 +1,66 @@
-Role Name
+lighthouse-role
 =========
 
-A brief description of the role goes here.
+Роль производит:  
+1. Установку веб-сервера nginx  
+2. Скачивание с git-репозитория Lighthouse и его накатку в вебсервер  
+3. Создание конфигурационного файла nginx для доступа к ресурсам Lighthouse  
+4. Запуск веб-сервера nginx  
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+1. Ubuntu ОС
+2. БД Clickhouse  
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+`vars/main.yml`:  
+Содержит в параметрах ссылку на git-репозитория Lighthouse с исходным кодом :     
+```yaml
+lighthouse_src: "https://github.com/VKCOM/lighthouse/archive/refs/heads/master.zip"
+```
+
+`defaults/main.yml`:  
+Порт веб-сервера:     
+```yaml
+llighthouse_port: "80"
+```
+
+`templates/lighthouse.j2`
+Конфигурационный файл nginx
+```
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        root /var/www/html/lighthouse-master;
+        index index.html index.htm index.nginx-debian.html;
+        server_name _;
+        location / {
+                try_files $uri $uri/ =404;
+        }
+}
+```
 
 Dependencies
 ------------
+Ссылка на роль Clickhouse `ansible-clickhouse`: https://github.com/AlexeySetevoi/ansible-clickhouse  
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+ Добавление роли в playbook:  
+```yaml
+- name: Install Lighthouse
+  hosts: lighthouse
+  roles:
+    - role: lighthouse-role
+```
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
 
 License
 -------
 
 BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).

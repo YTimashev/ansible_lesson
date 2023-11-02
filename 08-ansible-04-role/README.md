@@ -4,6 +4,7 @@
 
 1. * Необязательно. Познакомьтесь с [LightHouse](https://youtu.be/ymlrNlaHzIY?t=929).
 2. Создайте два пустых публичных репозитория в любом своём проекте: vector-role и lighthouse-role.
+ >Репозитории: [vector-role ](https://github.com/YTimashev/vector-role.git) и [lighthouse-role](https://github.com/YTimashev/lighthouse-role.git)
 3. Добавьте публичную часть своего ключа к своему профилю на GitHub.
 
 ## Основная часть
@@ -14,9 +15,9 @@
 
 Ожидаемый результат — существуют три ваших репозитория: два с roles и один с playbook.
 
-**Что нужно сделать**
+**Что сделано**
 
-1. Создайте в старой версии playbook файл `requirements.yml` и заполните его содержимым:
+1. В старой версии playbook создан файл `requirements.yml` , в который зазместили следующий код:
 
    ```yaml
    ---
@@ -26,7 +27,9 @@
        name: clickhouse 
    ```
 
-2. При помощи `ansible-galaxy` скачайте себе эту роль.
+> [requirements.yml](playbook/requirements.yml)
+
+2. При помощи `ansible-galaxy` скачал себе эту роль.
 ```
 tim@tim:~/nl/devops-netology/ansible/08-ansible-04-role/playbook$ ansible-galaxy install -p roles -r requirements.yml
 Starting galaxy role install process
@@ -38,30 +41,31 @@ Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 - clickhouse (1.13) was installed successfully
 tim@tim:~/nl/devops-netology/ansible/08-ansible-04-role/playbook$ 
 ```
+> Скачанная роль [ansible-galaxy](playbook/roles/clickhouse)
 
-3. Создайте новый каталог с ролью при помощи `ansible-galaxy role init vector-role`.
+3. Созданы новые каталоги с ролями при помощи `ansible-galaxy role init vector-role`и `ansible-galaxy role init  lighthouse-role`
 ```
 tim@tim:~/nl/devops-netology/ansible/08-ansible-04-role/playbook/roles$ ansible-galaxy role init vector-role
 - Role vector-role was created successfully
-tim@tim:~/nl/devops-netology/ansible/08-ansible-04-role/playbook/roles$ 
-```
-4. На основе tasks из старого playbook заполните новую role. Разнесите переменные между `vars` и `default`. 
-5. Перенести нужные шаблоны конфигов в `templates`.
-6. Опишите в `README.md` обе роли и их параметры. Пример качественной документации ansible role [по ссылке](https://github.com/cloudalchemy/ansible-prometheus).
-
-
-7. Повторите шаги 3–6 для LightHouse. Помните, что одна роль должна настраивать один продукт.
-```
 tim@tim:~/nl/devops-netology/ansible/08-ansible-04-role/playbook/roles$ ansible-galaxy role init lighthouse-role
 - Role lighthouse-role was created successfully
 tim@tim:~/nl/devops-netology/ansible/08-ansible-04-role/playbook/roles$ 
 ```
+4. На основе tasks из старого playbook заполнена новая role. Разнесены переменные между `vars` и `default`. 
+5. Перенесены нужные шаблоны конфигов в `templates`.
+6. В файлах `README.md` описаны обе роли и их параметры. 
+>Ссылка на [README.md](playbook/roles/vector-role/README.md) vector-role
+>Ссылка на [README.md](playbook/roles/lighthouse-role/README.md) lighthouse-role
 
+7. Обе roles выложены в репозитории. Проставлены теги, с использованием семантической нумерацией. Добавлены roles в `requirements.yml` в playbook.
+>Ссылка на репозиторий [vector-role](https://github.com/YTimashev/vector-role.git) 
+>Ссылка на репозиторий [lighthouse-role](https://github.com/YTimashev/lighthouse-role.git)
 
-8. Выложите все roles в репозитории. Проставьте теги, используя семантическую нумерацию. Добавьте roles в `requirements.yml` в playbook.
-9. Переработайте playbook на использование roles. Не забудьте про зависимости LightHouse и возможности совмещения `roles` с `tasks`.
-10. Выложите playbook в репозиторий.
-11. В ответе дайте ссылки на оба репозитория с roles и одну ссылку на репозиторий с playbook.
+8. Переработан playbook на использование roles. Учтены зависимости LightHouse и возможности совмещения `roles` с `tasks`.
+9. Выложен playbook в репозиторий.
+>Ссылка на репозиторий [playbook](https://github.com/YTimashev/ansible_lesson/tree/main/08-ansible-04-role/playbook)
+
+11. В ответах выше даны ссылки на оба репозитория с roles и ссылка на репозиторий с playbook.
 
 ---
 
