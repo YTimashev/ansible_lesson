@@ -2,7 +2,7 @@
 
 ## Подготовка к выполнению
 
-1. Созданы два пустых публичных репозитория: vector-role и lighthouse-role.
+1. Созданы два публичных репозитория: vector-role и lighthouse-role.
  > Репозитории: [vector-role ](https://github.com/YTimashev/vector-role.git) и [lighthouse-role](https://github.com/YTimashev/lighthouse-role.git)
 2. Создана инфраструктура из трех хостов в Yandex Cloud при помощи Terraform 
 
