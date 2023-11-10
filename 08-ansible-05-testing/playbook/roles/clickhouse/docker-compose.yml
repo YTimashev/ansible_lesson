@@ -1,0 +1,13 @@
+---
+version: '3'
+
+services:
+  clickhouse_vm:
+    image: aragast/netology
+    container_name: clickhouse-01
+    restart: unless-stopped
+    entrypoint: "sleep infinity"
+    ports:
+      - "9000:9000"
+      - "8123:8123"
+    tty: true

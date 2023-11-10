@@ -1,0 +1,6 @@
+---
+- name: Install vector packages dnf
+  become: true
+  ansible.builtin.yum:
+    name: ./vector-{{ vector_version }}-dnf.rpm
+  notify: Start vector service dnf

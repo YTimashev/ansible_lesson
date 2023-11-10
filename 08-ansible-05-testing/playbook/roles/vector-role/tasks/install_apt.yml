@@ -1,0 +1,7 @@
+---
+- name: Install vector packages deb
+  become: true
+  ansible.builtin.apt:
+    deb: ./vector-{{ vector_version }}.dpkg
+    state: present
+  notify: Start vector service deb
