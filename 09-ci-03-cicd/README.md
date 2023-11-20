@@ -72,6 +72,8 @@ tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$
 ```
 
 5. Запустите анализатор против кода из директории [example](./example) с дополнительным ключом `-Dsonar.coverage.exclusions=fail.py`.
+<details>
+<summary>Вывод анализатора</summary>
 ```bash
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$ sonar-scanner \
   -Dsonar.projectKey=netology \
@@ -181,7 +183,7 @@ INFO: Final Memory: 18M/80M
 INFO: ------------------------------------------------------------------------
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$ 
 ```
-
+</details>
 6. Посмотрите результат в интерфейсе.
 ![4](src/4.png)
 
@@ -189,6 +191,8 @@ tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$
 >[файл с исправленными ошибками](example/fail.py)
 
 8. Запустите анализатор повторно — проверьте, что QG пройдены успешно.
+<details>
+<summary>Повторный запуск анализатора</summary>
 ```bash
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$ sonar-scanner   -Dsonar.projectKey=netology   -Dsonar.sources=.   -Dsonar.host.url=http://158.160.51.203:9000   -Dsonar.login=b302c6fe7cf986b4cdf9a3938d51694b8bf8ff82 -Dsonar.coverage.exclusions=fail.py
 INFO: Scanner configuration file: /home/tim/sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
@@ -293,6 +297,8 @@ INFO: Final Memory: 9M/40M
 INFO: ------------------------------------------------------------------------
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$ 
 ```
+</details>
+
 9. Сделайте скриншот успешного прохождения анализа, приложите к решению ДЗ.
 ![5](src/5.png)
 ## Знакомство с Nexus
@@ -364,6 +370,8 @@ tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd$
 
 1. Поменяйте в `pom.xml` блок с зависимостями под ваш артефакт из первого пункта задания для Nexus (java с версией 8_282).
 2. Запустите команду `mvn package` в директории с `pom.xml`, ожидайте успешного окончания.
+<details>
+<summary>Вывод команды `mvn package`</summary
 ```bash
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/mvn$ mvn package
 [INFO] Scanning for projects...
@@ -405,6 +413,8 @@ Downloaded from my-repo: http://158.160.59.212:8081/repository/maven-releases/ne
 [INFO] ------------------------------------------------------------------------
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/mvn$ 
 ```
+</details>
+  
 3. Проверьте директорию `~/.m2/repository/`, найдите ваш артефакт.
 ```bash
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/mvn$ ls -lah ~/.m2/repository/netology/java/8_282/
