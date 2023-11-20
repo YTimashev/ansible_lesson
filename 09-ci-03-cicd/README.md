@@ -3,14 +3,14 @@
 ## Подготовка к выполнению
 
 1. Создайте два VM в Yandex Cloud с параметрами: 2CPU 4RAM Centos7 (остальное по минимальным требованиям).
->Создана инфраструктура из трех хостов в Yandex Cloud при помощи [Terraform](/terraform) 
+>Создана инфраструктура из трех хостов в Yandex Cloud при помощи [Terraform](09-ci-03-cicd/terraform) 
 ```bash
 Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-external_ip_address_vm_01 = "158.160.105.35"
-external_ip_address_vm_02 = "158.160.103.102"
+external_ip_address_vm_01 = "158.160.59.212"
+external_ip_address_vm_02 = "158.160.53.181"
 ```
 2. Пропишите в [inventory](./infrastructure/inventory/cicd/hosts.yml) [playbook](./infrastructure/site.yml) созданные хосты.
 >В файл  [inventory](./infrastructure/inventory/cicd/hosts.yml) прописаны хосты созданныу в Yandex Cloud.
