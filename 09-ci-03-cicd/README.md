@@ -74,7 +74,7 @@ tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$
 5. Запустите анализатор против кода из директории [example](./example) с дополнительным ключом `-Dsonar.coverage.exclusions=fail.py`.
 <details>
 <summary>Вывод анализатора</summary>
-```bash
+```console
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$ sonar-scanner \
   -Dsonar.projectKey=netology \
   -Dsonar.sources=. \
@@ -193,7 +193,7 @@ tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$
 8. Запустите анализатор повторно — проверьте, что QG пройдены успешно.
 <details>
 <summary>Повторный запуск анализатора</summary>
-```bash
+```console
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$ sonar-scanner   -Dsonar.projectKey=netology   -Dsonar.sources=.   -Dsonar.host.url=http://158.160.51.203:9000   -Dsonar.login=b302c6fe7cf986b4cdf9a3938d51694b8bf8ff82 -Dsonar.coverage.exclusions=fail.py
 INFO: Scanner configuration file: /home/tim/sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
 INFO: Project root configuration file: NONE
@@ -372,7 +372,7 @@ tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd$
 2. Запустите команду `mvn package` в директории с `pom.xml`, ожидайте успешного окончания.
 <details>
 <summary>Вывод команды `mvn package`</summary
-```bash
+```console
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/mvn$ mvn package
 [INFO] Scanning for projects...
 [INFO] 
