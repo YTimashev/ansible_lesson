@@ -27,10 +27,10 @@ nexus-01                   : ok=17   changed=15   unreachable=0    failed=0    s
 sonar-01                   : ok=35   changed=27   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
 ```
-5. Проверьте готовность SonarQube через [браузер](http://localhost:9000).
+5. Проверьте готовность SonarQube через [браузер](http://<IP_VM_SONAR>:9000).
 6. Зайдите под admin\admin, поменяйте пароль на свой.
 ![1](src/1.png)
-7.  Проверьте готовность Nexus через [бразуер](http://localhost:8081).
+7.  Проверьте готовность Nexus через [бразуер](http://<IP_VM_NEXUS>:8081).
 8. Подключитесь под admin\admin123, поменяйте пароль, сохраните анонимный доступ.
 ![2](src/2.png)
 
@@ -74,13 +74,14 @@ tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$
 5. Запустите анализатор против кода из директории [example](./example) с дополнительным ключом `-Dsonar.coverage.exclusions=fail.py`.
 <details>
 <summary>Вывод анализатора</summary>
+  
 ```console
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$ sonar-scanner \
   -Dsonar.projectKey=netology \
   -Dsonar.sources=. \
   -Dsonar.host.url=http://158.160.51.203:9000 \
   -Dsonar.login=b302c6fe7cf986b4cdf9a3938d51694b8bf8ff82 \
-> -Dsonar.coverage.exclusions=fail.py
+  -Dsonar.coverage.exclusions=fail.py
 INFO: Scanner configuration file: /home/tim/sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
 INFO: Project root configuration file: NONE
 INFO: SonarScanner 5.0.1.3006
@@ -184,6 +185,7 @@ INFO: ------------------------------------------------------------------------
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$ 
 ```
 </details>
+
 6. Посмотрите результат в интерфейсе.
 ![4](src/4.png)
 
@@ -193,6 +195,7 @@ tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$
 8. Запустите анализатор повторно — проверьте, что QG пройдены успешно.
 <details>
 <summary>Повторный запуск анализатора</summary>
+  
 ```console
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/example$ sonar-scanner   -Dsonar.projectKey=netology   -Dsonar.sources=.   -Dsonar.host.url=http://158.160.51.203:9000   -Dsonar.login=b302c6fe7cf986b4cdf9a3938d51694b8bf8ff82 -Dsonar.coverage.exclusions=fail.py
 INFO: Scanner configuration file: /home/tim/sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
@@ -371,7 +374,8 @@ tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd$
 1. Поменяйте в `pom.xml` блок с зависимостями под ваш артефакт из первого пункта задания для Nexus (java с версией 8_282).
 2. Запустите команду `mvn package` в директории с `pom.xml`, ожидайте успешного окончания.
 <details>
-<summary>Вывод команды `mvn package`</summary
+<summary>Вывод команды `mvn package`</summary>
+  
 ```console
 tim@tim:~/nl/devops-netology/ansible/09-ci-03-cicd/mvn$ mvn package
 [INFO] Scanning for projects...
