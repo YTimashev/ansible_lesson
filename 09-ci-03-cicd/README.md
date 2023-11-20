@@ -3,7 +3,7 @@
 ## Подготовка к выполнению
 
 1. Создайте два VM в Yandex Cloud с параметрами: 2CPU 4RAM Centos7 (остальное по минимальным требованиям).
->Создана инфраструктура из трех хостов в Yandex Cloud при помощи [Terraform](09-ci-03-cicd/terraform) 
+>Создана инфраструктура из трех хостов в Yandex Cloud при помощи [Terraform](/terraform) 
 ```bash
 Apply complete! Resources: 4 added, 0 changed, 0 destroyed.
 
