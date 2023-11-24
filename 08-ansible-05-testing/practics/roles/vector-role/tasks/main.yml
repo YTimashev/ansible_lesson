@@ -1,0 +1,43 @@
+---
+# tasks file for vector-role
+#Centos
+- name: Check need prepare Centos
+  become: true
+  command: grep 'http://vault.centos.org/$contentdir/$releasever/PowerTools/$basearch/os/' /etc/yum.repos.d/CentOS-*
+  register: check_need_prepare
+  check_mode: no
+  ignore_errors: true
+  when: ansible_host == "centos"
+- name: Prepare Centos
+  become: true
+  ansible.builtin.shell: |
+    cd /etc/yum.repos.d/
+    sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+  when:
+    - ansible_host == "centos"
+    - check_need_prepare.rc != 0
+- name: Download Vector for Centos
+  become: true
+  ansible.builtin.get_url:
+    url: "https://packages.timber.io/vector/{{ vector_version }}/vector-{{ vector_subversion }}.x86_64.rpm"
+    dest: "/tmp/{{ vector_package }}.rpm"
+  when: ansible_host == "centos"
+- name: Install Vector Centos
+  become: true
+  package:
+    disable_gpg_check: true
+    name: "/tmp/{{ vector_package }}.rpm"
+    state: present
+  when: ansible_host == "centos"
+#Ubuntu
+- name: Download Vector Ubuntu
+  become: true
+  ansible.builtin.get_url:
+    url: "https://packages.timber.io/vector/{{ vector_version }}/vector_{{ vector_subversion }}_amd64.deb"
+    dest: "/tmp/{{ vector_package }}.deb"
+  when: ansible_host == "ubuntu"
+- name: Install Vector Ubuntu
+  become: true
+  ansible.builtin.shell: dpkg -i /tmp/{{ vector_package }}.deb
+  when: ansible_host == "ubuntu"

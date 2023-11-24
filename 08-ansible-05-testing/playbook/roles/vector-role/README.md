@@ -1,43 +1,38 @@
-vector-role
+Role Name
 =========
-v1.0.0
 
-Роль выполняет:
-1. Скачивание Vector
-2. Установка Vector
+A brief description of the role goes here.
 
 Requirements
 ------------
 
-1. Ubuntu ОС
-2. БД Clickhouse.
+Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
 Role Variables
 --------------
 
-`defaults/main.yml`:
-Версия Vector для установки:   
-```yaml
-vector_version: "0.25.2"
-```
+A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
 Dependencies
 ------------
-Ссылка на роль Clickhouse `ansible-clickhouse`: https://github.com/AlexeySetevoi/ansible-clickhouse  
-(или аналогичная по функционалу роль).
+
+A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
 Example Playbook
 ----------------
 
-Пример добавление роли в playbook:  
-```yaml
-- name: Install Vector
-  hosts: vector
-  roles:
-    - role: vector-role
-```      
+Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+
+    - hosts: servers
+      roles:
+         - { role: username.rolename, x: 42 }
 
 License
 -------
 
 BSD
+
+Author Information
+------------------
+
+An optional section for the role authors to include contact information, or a website (HTML is not allowed).

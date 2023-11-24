@@ -1,22 +1,25 @@
 ---
-- name: Install Clickhouse
-  hosts: clickhouse
+- name: Install sudo and systemctl
+  hosts: all
+  become: true
   roles:
-    - clickhouse
+    - { role: inst_sudo_systemctl, when: ansible_system == 'Linux' }
+
+#- name: Install Clickhouse
+#  hosts: clickhouse
+#  become: true
+#  roles:
+#    - { role: clickhouse, when: ansible_system == 'Linux' }
 
 - name: Install Vector
   hosts: vector
+  become: true
   roles:
-    - vector-role
+    - { role: vector-role, when: ansible_system == 'Linux' }
+
 
 - name: Install lighthouse
   hosts: lighthouse
-  pre_tasks:
-    - name: Install unzip
-      become: true
-      ansible.builtin.apt:
-        name: unzip
-        state: present
-        update_cache: true
+  become: true
   roles:
-    - lighthouse-role
+    - { role: lighthouse-role, when: ansible_system == 'Linux' }

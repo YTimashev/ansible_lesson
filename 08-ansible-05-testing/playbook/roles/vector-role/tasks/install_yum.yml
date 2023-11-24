@@ -1,6 +1,0 @@
----
-- name: Install vector packages rpm
-  become: true
-  ansible.builtin.yum:
-    name: ./vector-{{ vector_version }}.rpm
-  notify: Start vector service yum

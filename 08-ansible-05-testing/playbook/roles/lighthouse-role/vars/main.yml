@@ -1,3 +1,4 @@
 ---
 # vars file for lighthouse-role
-lighthouse_src: "https://github.com/VKCOM/lighthouse/archive/refs/heads/master.zip"
+lighthouse_repo: "https://github.com/VKCOM/lighthouse.git"
+lighthouse_branch: "master"

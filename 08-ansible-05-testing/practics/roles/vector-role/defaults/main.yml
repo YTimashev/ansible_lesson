@@ -1,0 +1,4 @@
+---
+# defaults file for vector-role
+vector_version: "0.22.3"
+vector_subversion: "0.27.1-1"

@@ -1,20 +1,10 @@
 ---
 # handlers file for vector-role
-- name: Start vector service deb
+# handlers для старта/рестарта сервиса Vector
+- name: Start Vector service
   become: true
-  ansible.builtin.service:
+  ansible.builtin.systemd:
     name: vector
     state: restarted
-  when: ansible_facts.pkg_mgr == "apt"
-- name: Start vector service yum
-  become: true
-  ansible.builtin.service:
-    name: vector
-    state: restarted
-  when: ansible_facts.pkg_mgr == "yum"
-- name: Start vector service dnf
-  become: true
-  ansible.builtin.service:
-    name: vector
-    state: restarted
-  when: ansible_facts.pkg_mgr == "dnf"
+    enabled: true
+  when: ansible_connection == 'docker'

@@ -1,33 +1,69 @@
 ---
 # tasks file for lighthouse-role
-- name: Install nginx
+- name: Check Lighthouse port
+  ansible.builtin.assert:
+    that: lighthouse_port | int > 1024
+- name: Install epel-release for centos7
   become: true
-  ansible.builtin.apt:
-    name: nginx
+  ansible.builtin.yum:
+    name: "epel-release"
     state: present
-    update_cache: true
-  notify: Restart nginx service
+  when:
+    - ansible_facts['distribution'] == "CentOS"
+    - ansible_facts['distribution_major_version'] == "7"
 
-- name: Get lighthouse distrib
-  ansible.builtin.get_url:
-    url: "{{ lighthouse_src }}"
-    dest: "./lighthouse.zip"
-    mode: "0644"
-- name: Unarchive lighthouse distrib into nginx
-  become: true
-  ansible.builtin.unarchive:
-    src: ./lighthouse.zip
-    dest: /var/www/html/
-    remote_src: true
-  notify: Restart nginx service
-- name: Make nginx config
+- name: Install NGinX repo for YUM
   become: true
   ansible.builtin.template:
-    src: lighthouse.j2
-    dest: /etc/nginx/sites-enabled/default
-    mode: "0644"
-  notify: Restart nginx service
-- name: Remove lighthouse distrib
+    src: nginx.repo
+    dest: "/etc/yum.repos.d/nginx.repo"
+  when: ansible_pkg_mgr == "yum"
+- name: Install NGinX and Git
+  become: true
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - "nginx"
+    - "git"
+- name: Check lighthouse files
   ansible.builtin.file:
-    path: "./lighthouse.zip"
-    state: absent
+    path: "{{ lighthouse_path }}/app.js"
+    state: file
+  register: lh_exists
+  ignore_errors: true
+- name: Clone VK Lighthouse
+  become: true
+  ansible.builtin.git:
+    repo: "{{ lighthouse_repo }}"
+    dest: "{{ lighthouse_path }}"
+    version: "{{ lighthouse_branch }}"
+    force: false
+  when: lh_exists.state == "absent"
+- name: Change lighthouse default host
+  become: true
+  ansible.builtin.replace:
+    path: "{{ lighthouse_path }}/app.js"
+    regexp: '127\.0\.0\.1:8123\/''\)'
+    replace: "{{ clickhouse_host }}:{{ clickhouse_port }}/?user={{ clickhouse_user }}&password={{ clickhouse_password }}')"
+- name: Restore lighthouse default host
+  become: true
+  ansible.builtin.replace:
+    path: "{{ lighthouse_path }}/app.js"
+    regexp: '{{ clickhouse_host }}:{{ clickhouse_port }}\/\?user={{ clickhouse_user }}&password={{ clickhouse_password }}''\)'
+    replace: "127.0.0.1:8123/')"
+  when: lh_exists.state == "file"
+  tags:
+    - never
+- name: Configure NGinX
+  become: true
+  ansible.builtin.template:
+    src: lighthouse.conf.j2
+    dest: "/etc/nginx/conf.d/lighthouse.conf"
+  notify: Restart nginx
+- name: Enable NGinX autostart
+  become: true
+  ansible.builtin.service:
+    name: "nginx"
+    enabled: true
+    state: started
