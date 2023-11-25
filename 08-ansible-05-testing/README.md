@@ -31,6 +31,7 @@ tim@tim:~/nl/devops-netology/ansible/08-ansible-05-testing$
 ### Molecule
 
 1. Запустите  `molecule test -s centos_7` внутри корневой директории clickhouse-role, посмотрите на вывод команды. Данная команда может отработать с ошибками, это нормально. Наша цель - посмотреть как другие в реальном мире используют молекулу.
+
 ```console
 TASK [Apply Clickhouse Role] ***************************************************
 ERROR! the role 'ansible-clickhouse' was not found in /home/tim/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/clickhouse/molecule/resources/playbooks/roles:/home/tim/.cache/molecule/clickhouse/centos_7/roles:/home/tim/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles:/home/tim/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles:/home/tim/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/clickhouse:/home/tim/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/clickhouse/molecule/resources/playbooks
@@ -1133,8 +1134,8 @@ provisioner:
 verifier:
   name: ansible
 ```
->Во время проведения теста выскочила ошибка при установке `Vector` пакета на `CentOS:8` об отстутсвии репозитория. После поиска проблемы в инете выяснилось что происходит это по причине отстутсвия/прекращения поддержки производителя `CentOS:8`.
->Вариант установки `Vector` на `CentOS:8` [вижу в распаковке исходного архива](https://vector.dev/docs/setup/installation/manual/from-archives/) `Vector` в OS, но он требует глубокого погружения в тему и дополнительного времени, которого к большому сожалению катастрофически не хватает. По этой причине дальнейшие тесты буду проводить на `Ubuntu` и `Centos:7`.
+>Во время проведения теста выскочила ошибка при установке `Vector` пакета на `CentOS:8` об отстутсвии репозитория. После поиска проблемы в инете выяснилось что происходит это по причине отстутсвия/прекращения поддержки `CentOS:8` производителем.
+>Вариант установки `Vector` на `CentOS:8` [вижу в распаковке исходного архива](https://vector.dev/docs/setup/installation/manual/from-archives/) `Vector` в `CentOS:8`, но он требует глубокого погружения в тему и дополнительного времени, которого к большому сожалению катастрофически не хватает. По этой причине дальнейшие тесты буду проводить на `Ubuntu` и `Centos:7`.
 ```
 TASK [vector-role : Install Vector packages | CentOS] **************************
 fatal: [centos8]: FAILED! => {"changed": false, "msg": "Failed to download metadata for repo 'appstream': Cannot prepare internal mirrorlist: No URLs in mirrorlist", "rc": 1, "results": []}
@@ -1148,6 +1149,7 @@ changed: [centos7]
 5. Запустите тестирование роли повторно и проверьте, что оно прошло успешно.
 
 <details>
+
 <summary>Вывод команды `molecule test` на `Ubuntu` и `Centos:7`. Успех.</summary>
 tim@tim:~/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/vector-role$ molecule test
 INFO     default scenario test matrix: dependency, lint, cleanup, destroy, syntax, create, prepare, converge, idempotence, side_effect, verify, cleanup, destroy
@@ -1414,29 +1416,285 @@ tim@tim:~/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/vector
 </details>
 
 6. Добавьте новый тег на коммит с рабочим сценарием в соответствии с семантическим версионированием.
+```bush
+tim@tim:~/nl/devops-netology/ansible$ git tag v1.1.0
+tim@tim:~/nl/devops-netology/ansible$ git push origin v1.1.0
+Перечисление объектов: 137, готово.
+Подсчет объектов: 100% (137/137), готово.
+При сжатии изменений используется до 8 потоков
+Сжатие объектов: 100% (78/78), готово.
+Запись объектов: 100% (99/99), 156.37 КиБ | 9.77 МиБ/с, готово.
+Всего 99 (изменений 19), повторно использовано 0 (изменений 0), повторно использовано пакетов 0
+remote: Resolving deltas: 100% (19/19), completed with 11 local objects.
+To https://github.com/YTimashev/ansible_lesson.git
+ * [new tag]         v1.1.0 -> v1.1.0
+```
 
 ### Tox
 
-1. Добавьте в директорию с vector-role файлы из [директории](./example).
+>Устанавливаем `tox` 
+> `pip3 install tox`
+
+1. Добавьте в директорию с vector-role файлы из [директории](https://github.com/netology-code/mnt-homeworks/tree/MNT-video/08-ansible-05-testing/example).
 2. Запустите `docker run --privileged=True -v <path_to_repo>:/opt/vector-role -w /opt/vector-role -it aragast/netology:latest /bin/bash`, где path_to_repo — путь до корня репозитория с vector-role на вашей файловой системе.
+
+```console
+tim@tim:~/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/vector-role$ docker run --privileged=True -v /home/tim/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/vector-role:/opt/vector-role -w /opt/vector-role -it aragast/netology:latest /bin/bash
+[root@49b08ef6d570 vector-role]# 
+```
+
 3. Внутри контейнера выполните команду `tox`, посмотрите на вывод.
-5. Создайте облегчённый сценарий для `molecule` с драйвером `molecule_podman`. Проверьте его на исполнимость.
-6. Пропишите правильную команду в `tox.ini`, чтобы запускался облегчённый сценарий.
-8. Запустите команду `tox`. Убедитесь, что всё отработало успешно.
-9. Добавьте новый тег на коммит с рабочим сценарием в соответствии с семантическим версионированием.
+
+<details>
+
+<summary>Вывод команды `tox` в `docker container` `aragast/netology:latest`</summary>
+```console
+[root@49b08ef6d570 vector-role]# tox
+py37-ansible210 create: /opt/vector-role/.tox/py37-ansible210
+py37-ansible210 installdeps: -rtox-requirements.txt, ansible<3.0
+py37-ansible210 installed: ansible==2.10.7,ansible-base==2.10.17,ansible-compat==1.0.0,ansible-lint==5.1.3,arrow==1.2.3,bcrypt==4.0.1,binaryornot==0.4.4,bracex==2.3.post1,cached-property==1.5.2,Cerberus==1.3.5,certifi==2023.11.17,cffi==1.15.1,chardet==5.2.0,charset-normalizer==3.3.2,click==8.1.7,click-help-colors==0.9.4,cookiecutter==2.5.0,cryptography==41.0.5,distro==1.8.0,enrich==1.2.7,idna==3.4,importlib-metadata==6.7.0,Jinja2==3.1.2,jmespath==1.0.1,lxml==4.9.3,markdown-it-py==2.2.0,MarkupSafe==2.1.3,mdurl==0.1.2,molecule==3.5.2,molecule-podman==1.1.0,packaging==23.2,paramiko==2.12.0,pathspec==0.11.2,pluggy==1.2.0,pycparser==2.21,Pygments==2.17.2,PyNaCl==1.5.0,python-dateutil==2.8.2,python-slugify==8.0.1,PyYAML==5.4.1,requests==2.31.0,rich==13.7.0,ruamel.yaml==0.18.5,ruamel.yaml.clib==0.2.8,selinux==0.2.1,six==1.16.0,subprocess-tee==0.3.5,tenacity==8.2.3,text-unidecode==1.3,typing_extensions==4.7.1,urllib3==2.0.7,wcmatch==8.4.1,yamllint==1.26.3,zipp==3.15.0
+py37-ansible210 run-test-pre: PYTHONHASHSEED='772186693'
+py37-ansible210 run-test: commands[0] | molecule test -s compatibility --destroy always
+CRITICAL 'molecule/compatibility/molecule.yml' glob failed.  Exiting.
+ERROR: InvocationError for command /opt/vector-role/.tox/py37-ansible210/bin/molecule test -s compatibility --destroy always (exited with code 1)
+py37-ansible30 create: /opt/vector-role/.tox/py37-ansible30
+py37-ansible30 installdeps: -rtox-requirements.txt, ansible<3.1
+py37-ansible30 installed: ansible==3.0.0,ansible-base==2.10.17,ansible-compat==1.0.0,ansible-lint==5.1.3,arrow==1.2.3,bcrypt==4.0.1,binaryornot==0.4.4,bracex==2.3.post1,cached-property==1.5.2,Cerberus==1.3.5,certifi==2023.11.17,cffi==1.15.1,chardet==5.2.0,charset-normalizer==3.3.2,click==8.1.7,click-help-colors==0.9.4,cookiecutter==2.5.0,cryptography==41.0.5,distro==1.8.0,enrich==1.2.7,idna==3.4,importlib-metadata==6.7.0,Jinja2==3.1.2,jmespath==1.0.1,lxml==4.9.3,markdown-it-py==2.2.0,MarkupSafe==2.1.3,mdurl==0.1.2,molecule==3.5.2,molecule-podman==1.1.0,packaging==23.2,paramiko==2.12.0,pathspec==0.11.2,pluggy==1.2.0,pycparser==2.21,Pygments==2.17.2,PyNaCl==1.5.0,python-dateutil==2.8.2,python-slugify==8.0.1,PyYAML==5.4.1,requests==2.31.0,rich==13.7.0,ruamel.yaml==0.18.5,ruamel.yaml.clib==0.2.8,selinux==0.2.1,six==1.16.0,subprocess-tee==0.3.5,tenacity==8.2.3,text-unidecode==1.3,typing_extensions==4.7.1,urllib3==2.0.7,wcmatch==8.4.1,yamllint==1.26.3,zipp==3.15.0
+py37-ansible30 run-test-pre: PYTHONHASHSEED='772186693'
+py37-ansible30 run-test: commands[0] | molecule test -s compatibility --destroy always
+CRITICAL 'molecule/compatibility/molecule.yml' glob failed.  Exiting.
+ERROR: InvocationError for command /opt/vector-role/.tox/py37-ansible30/bin/molecule test -s compatibility --destroy always (exited with code 1)
+py39-ansible210 create: /opt/vector-role/.tox/py39-ansible210
+py39-ansible210 installdeps: -rtox-requirements.txt, ansible<3.0
+py39-ansible210 installed: ansible==2.10.7,ansible-base==2.10.17,ansible-compat==4.1.10,ansible-core==2.15.6,ansible-lint==5.1.3,arrow==1.3.0,attrs==23.1.0,bcrypt==4.0.1,binaryornot==0.4.4,bracex==2.4,Cerberus==1.3.5,certifi==2023.11.17,cffi==1.16.0,chardet==5.2.0,charset-normalizer==3.3.2,click==8.1.7,click-help-colors==0.9.4,cookiecutter==2.5.0,cryptography==41.0.5,distro==1.8.0,enrich==1.2.7,idna==3.4,importlib-resources==5.0.7,Jinja2==3.1.2,jmespath==1.0.1,jsonschema==4.20.0,jsonschema-specifications==2023.11.1,lxml==4.9.3,markdown-it-py==3.0.0,MarkupSafe==2.1.3,mdurl==0.1.2,molecule==3.5.2,molecule-podman==2.0.0,packaging==23.2,paramiko==2.12.0,pathspec==0.11.2,pluggy==1.3.0,pycparser==2.21,Pygments==2.17.2,PyNaCl==1.5.0,python-dateutil==2.8.2,python-slugify==8.0.1,PyYAML==5.4.1,referencing==0.31.0,requests==2.31.0,resolvelib==1.0.1,rich==13.7.0,rpds-py==0.13.1,ruamel.yaml==0.18.5,ruamel.yaml.clib==0.2.8,selinux==0.3.0,six==1.16.0,subprocess-tee==0.4.1,tenacity==8.2.3,text-unidecode==1.3,types-python-dateutil==2.8.19.14,typing_extensions==4.8.0,urllib3==2.1.0,wcmatch==8.5,yamllint==1.26.3
+py39-ansible210 run-test-pre: PYTHONHASHSEED='772186693'
+py39-ansible210 run-test: commands[0] | molecule test -s compatibility --destroy always
+CRITICAL 'molecule/compatibility/molecule.yml' glob failed.  Exiting.
+ERROR: InvocationError for command /opt/vector-role/.tox/py39-ansible210/bin/molecule test -s compatibility --destroy always (exited with code 1)
+py39-ansible30 create: /opt/vector-role/.tox/py39-ansible30
+py39-ansible30 installdeps: -rtox-requirements.txt, ansible<3.1
+py39-ansible30 installed: ansible==3.0.0,ansible-base==2.10.17,ansible-compat==4.1.10,ansible-core==2.15.6,ansible-lint==5.1.3,arrow==1.3.0,attrs==23.1.0,bcrypt==4.0.1,binaryornot==0.4.4,bracex==2.4,Cerberus==1.3.5,certifi==2023.11.17,cffi==1.16.0,chardet==5.2.0,charset-normalizer==3.3.2,click==8.1.7,click-help-colors==0.9.4,cookiecutter==2.5.0,cryptography==41.0.5,distro==1.8.0,enrich==1.2.7,idna==3.4,importlib-resources==5.0.7,Jinja2==3.1.2,jmespath==1.0.1,jsonschema==4.20.0,jsonschema-specifications==2023.11.1,lxml==4.9.3,markdown-it-py==3.0.0,MarkupSafe==2.1.3,mdurl==0.1.2,molecule==3.5.2,molecule-podman==2.0.0,packaging==23.2,paramiko==2.12.0,pathspec==0.11.2,pluggy==1.3.0,pycparser==2.21,Pygments==2.17.2,PyNaCl==1.5.0,python-dateutil==2.8.2,python-slugify==8.0.1,PyYAML==5.4.1,referencing==0.31.0,requests==2.31.0,resolvelib==1.0.1,rich==13.7.0,rpds-py==0.13.1,ruamel.yaml==0.18.5,ruamel.yaml.clib==0.2.8,selinux==0.3.0,six==1.16.0,subprocess-tee==0.4.1,tenacity==8.2.3,text-unidecode==1.3,types-python-dateutil==2.8.19.14,typing_extensions==4.8.0,urllib3==2.1.0,wcmatch==8.5,yamllint==1.26.3
+py39-ansible30 run-test-pre: PYTHONHASHSEED='772186693'
+py39-ansible30 run-test: commands[0] | molecule test -s compatibility --destroy always
+CRITICAL 'molecule/compatibility/molecule.yml' glob failed.  Exiting.
+ERROR: InvocationError for command /opt/vector-role/.tox/py39-ansible30/bin/molecule test -s compatibility --destroy always (exited with code 1)
+_______________________________________________________________ summary _______________________________________________________________
+ERROR:   py37-ansible210: commands failed
+ERROR:   py37-ansible30: commands failed
+ERROR:   py39-ansible210: commands failed
+ERROR:   py39-ansible30: commands failed
+[root@49b08ef6d570 vector-role]# 
+```
+
+</details>
+
+>Все проверки `tox` завершились одной и той же ошибкой на этапе `molecule test -s compatibility --destroy always` вероятно по причине отсутсвия в тестируемой роли сценария `compatibility`.
+
+4. Создайте облегчённый сценарий `tox` для `molecule` с драйвером `molecule_podman`. Проверьте его на исполнимость.
+```bash
+tim@tim:~/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/vector-role$ molecule init scenario tox --driver-name podman
+INFO     Initializing new scenario tox...
+INFO     Initialized scenario in /home/tim/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/vector-role/molecule/tox successfully.
+tim@tim:~/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/vector-role$ 
+```
+```bash
+tim@tim:~/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/vector-role$ molecule matrix -s tox test
+INFO     Test matrix
+---                                                                                                                               
+tox:                                                                                                                              
+  - destroy 
+  - create   
+  - converge    
+  - destroy 
+```
+
+5. Пропишите правильную команду в `tox.ini`, чтобы запускался облегчённый сценарий.
+> Прописал в `tox.ini` правильную команду, на одной платформе `centos7` с [укороченным тестом](playbook/roles/vector-role/molecule/tox/molecule.yml).
+```
+[tox]
+minversion = 1.8
+basepython = python3.6
+envlist = py{37}-ansible{210}
+skipsdist = true
+
+[testenv]
+passenv = *
+deps =
+    -r tox-requirements.txt
+    ansible210: ansible<3.0
+    ansible30: ansible<3.1
+commands =
+    {posargs:molecule test -s tox --destroy always}
+```
+
+6. Запустите команду `tox`. Убедитесь, что всё отработало успешно.
+
+<details>
+
+<summary>Вывод команды `tox` в `docker container`  c установленным `podman` - `aragast/netology:latest`. Тест прошел успешно.</summary>
+
+```console
+tim@tim:~/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/vector-role$ docker run --privileged=True -v /home/tim/nl/devops-netology/ansible/08-ansible-05-testing/playbook/roles/vector-role:/opt/vector-role -w /opt/vector-role -it aragast/netology:latest /bin/bash
+[root@9ed368993681 vector-role]# tox -r
+py37-ansible210 recreate: /opt/vector-role/.tox/py37-ansible210
+py37-ansible210 installdeps: -rtox-requirements.txt, ansible<3.0
+py37-ansible210 installed: ansible==2.10.7,ansible-base==2.10.17,ansible-compat==1.0.0,ansible-lint==5.1.3,arrow==1.2.3,bcrypt==4.0.1,binaryornot==0.4.4,bracex==2.3.post1,cached-property==1.5.2,Cerberus==1.3.5,certifi==2023.11.17,cffi==1.15.1,chardet==5.2.0,charset-normalizer==3.3.2,click==8.1.7,click-help-colors==0.9.4,cookiecutter==2.5.0,cryptography==41.0.5,distro==1.8.0,enrich==1.2.7,idna==3.5,importlib-metadata==6.7.0,Jinja2==3.1.2,jmespath==1.0.1,lxml==4.9.3,markdown-it-py==2.2.0,MarkupSafe==2.1.3,mdurl==0.1.2,molecule==3.5.2,molecule-podman==1.1.0,packaging==23.2,paramiko==2.12.0,pathspec==0.11.2,pluggy==1.2.0,pycparser==2.21,Pygments==2.17.2,PyNaCl==1.5.0,python-dateutil==2.8.2,python-slugify==8.0.1,PyYAML==5.4.1,requests==2.31.0,rich==13.7.0,ruamel.yaml==0.18.5,ruamel.yaml.clib==0.2.8,selinux==0.2.1,six==1.16.0,subprocess-tee==0.3.5,tenacity==8.2.3,text-unidecode==1.3,typing_extensions==4.7.1,urllib3==2.0.7,wcmatch==8.4.1,yamllint==1.26.3,zipp==3.15.0
+py37-ansible210 run-test-pre: PYTHONHASHSEED='2570507667'
+py37-ansible210 run-test: commands[0] | molecule test -s tox --destroy always
+INFO     tox scenario test matrix: destroy, create, converge, destroy
+INFO     Performing prerun...
+INFO     Set ANSIBLE_LIBRARY=/root/.cache/ansible-compat/b984a4/modules:/root/.ansible/plugins/modules:/usr/share/ansible/plugins/modules
+INFO     Set ANSIBLE_COLLECTIONS_PATH=/root/.cache/ansible-compat/b984a4/collections:/root/.ansible/collections:/usr/share/ansible/collections
+INFO     Set ANSIBLE_ROLES_PATH=/root/.cache/ansible-compat/b984a4/roles:/root/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
+INFO     Running tox > destroy
+INFO     Sanity checks: 'podman'
+
+PLAY [Destroy] *****************************************************************
+
+TASK [Destroy molecule instance(s)] ********************************************
+changed: [localhost] => (item={'image': 'docker.io/pycontribs/centos:7', 'name': 'centos7', 'pre_build_image': True})
+
+TASK [Wait for instance(s) deletion to complete] *******************************
+FAILED - RETRYING: Wait for instance(s) deletion to complete (300 retries left).
+changed: [localhost] => (item={'started': 1, 'finished': 0, 'ansible_job_id': '198435508484.151', 'results_file': '/root/.ansible_async/198435508484.151', 'changed': True, 'failed': False, 'item': {'image': 'docker.io/pycontribs/centos:7', 'name': 'centos7', 'pre_build_image': True}, 'ansible_loop_var': 'item'})
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=2    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+INFO     Running tox > create
+
+PLAY [Create] ******************************************************************
+
+TASK [get podman executable path] **********************************************
+ok: [localhost]
+
+TASK [save path to executable as fact] *****************************************
+ok: [localhost]
+
+TASK [Log into a container registry] *******************************************
+skipping: [localhost] => (item="centos7 registry username: None specified") 
+
+TASK [Check presence of custom Dockerfiles] ************************************
+ok: [localhost] => (item=Dockerfile: None specified)
+
+TASK [Create Dockerfiles from image names] *************************************
+skipping: [localhost] => (item="Dockerfile: None specified; Image: docker.io/pycontribs/centos:7") 
+
+TASK [Discover local Podman images] ********************************************
+ok: [localhost] => (item=centos7)
+
+TASK [Build an Ansible compatible image] ***************************************
+skipping: [localhost] => (item=docker.io/pycontribs/centos:7) 
+
+TASK [Determine the CMD directives] ********************************************
+ok: [localhost] => (item="centos7 command: None specified")
+
+TASK [Remove possible pre-existing containers] *********************************
+changed: [localhost]
+
+TASK [Discover local podman networks] ******************************************
+skipping: [localhost] => (item=centos7: None specified) 
+
+TASK [Create podman network dedicated to this scenario] ************************
+skipping: [localhost]
+
+TASK [Create molecule instance(s)] *********************************************
+changed: [localhost] => (item=centos7)
+
+TASK [Wait for instance(s) creation to complete] *******************************
+FAILED - RETRYING: Wait for instance(s) creation to complete (300 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (299 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (298 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (297 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (296 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (295 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (294 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (293 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (292 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (291 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (290 retries left).
+FAILED - RETRYING: Wait for instance(s) creation to complete (289 retries left).
+changed: [localhost] => (item=centos7)
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=8    changed=3    unreachable=0    failed=0    skipped=5    rescued=0    ignored=0
+
+INFO     Running tox > converge
+
+PLAY [Converge] ****************************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [centos7]
+
+TASK [Copy something to test use of synchronize module] ************************
+changed: [centos7]
+
+TASK [Include vector-role] *****************************************************
+
+TASK [vector-role : Get Vector distrib | CentOS] *******************************
+changed: [centos7]
+
+TASK [vector-role : Get Vector distrib | Ubuntu] *******************************
+skipping: [centos7]
+
+TASK [vector-role : Install Vector packages | CentOS] **************************
+changed: [centos7]
+
+TASK [vector-role : Install Vector packages | Ubuntu] **************************
+skipping: [centos7]
+
+TASK [vector-role : Deploy config Vector] **************************************
+[WARNING]: The value "0" (type int) was converted to "u'0'" (type string). If
+this does not look like what you expect, quote the entire value to ensure it
+does not change.
+changed: [centos7]
+
+TASK [vector-role : Creates directory] *****************************************
+changed: [centos7]
+
+TASK [vector-role : Create systemd unit Vector] ********************************
+skipping: [centos7]
+
+RUNNING HANDLER [vector-role : Start Vector service] ***************************
+skipping: [centos7]
+
+PLAY RECAP *********************************************************************
+centos7                    : ok=6    changed=5    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0
+
+INFO     Running tox > destroy
+
+PLAY [Destroy] *****************************************************************
+
+TASK [Destroy molecule instance(s)] ********************************************
+changed: [localhost] => (item={'image': 'docker.io/pycontribs/centos:7', 'name': 'centos7', 'pre_build_image': True})
+
+TASK [Wait for instance(s) deletion to complete] *******************************
+FAILED - RETRYING: Wait for instance(s) deletion to complete (300 retries left).
+FAILED - RETRYING: Wait for instance(s) deletion to complete (299 retries left).
+FAILED - RETRYING: Wait for instance(s) deletion to complete (298 retries left).
+changed: [localhost] => (item={'started': 1, 'finished': 0, 'ansible_job_id': '95314203480.2194', 'results_file': '/root/.ansible_async/95314203480.2194', 'changed': True, 'failed': False, 'item': {'image': 'docker.io/pycontribs/centos:7', 'name': 'centos7', 'pre_build_image': True}, 'ansible_loop_var': 'item'})
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=2    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+INFO     Pruning extra files from scenario ephemeral directory
+_______________________________________________________________ summary _______________________________________________________________
+  py37-ansible210: commands succeeded
+  congratulations :)
+[root@9ed368993681 vector-role]# 
+```
+</details>
+
+7. Добавьте новый тег на коммит с рабочим сценарием в соответствии с семантическим версионированием.
+```
+tim@tim:~/vector-role$ git tag v1.2.1
+tim@tim:~/vector-role$ git push origin tag v1.2.1
+```
 
 После выполнения у вас должно получится два сценария molecule и один tox.ini файл в репозитории. Не забудьте указать в ответе теги решений Tox и Molecule заданий. В качестве решения пришлите ссылку на  ваш репозиторий и скриншоты этапов выполнения задания. 
+> [Ссылка на `vector-role` с `tag v.1.2.1`](https://github.com/YTimashev/vector-role/tree/v1.2.1)
 
-## Необязательная часть
 
-1. Проделайте схожие манипуляции для создания роли LightHouse.
-2. Создайте сценарий внутри любой из своих ролей, который умеет поднимать весь стек при помощи всех ролей.
-3. Убедитесь в работоспособности своего стека. Создайте отдельный verify.yml, который будет проверять работоспособность интеграции всех инструментов между ними.
-4. Выложите свои roles в репозитории.
-
-В качестве решения пришлите ссылки и скриншоты этапов выполнения задания.
-
----
 
 ### Как оформить решение задания
 
