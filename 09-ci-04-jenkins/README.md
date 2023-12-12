@@ -978,6 +978,18 @@ Finished: SUCCESS
 7. Проверить работоспособность, исправить ошибки, исправленный Pipeline вложить в репозиторий в файл `ScriptedJenkinsfile`.
 [ScriptedJenkinsfile](pipeline/ScriptedJenkinsfile)
 
+>Ensure installation dir exists] ***********************************
+>fatal: [localhost]: FAILED! => {"changed": false, "module_stderr": "sudo: a password is required\n", "module_stdout": "", "msg": >"MODULE FAILURE\nSee stdout/stderr for the exact error", "rc": 1}
+
+Из вообщения видно, что ansible пытается выполнить команду с повышенными привелегиями (sudo), но соответствующий пароль не задан. Проблему можно решить разными способами - подробнее в статье Ansible – “sudo: a password is required”
+
+Я выбрал вариант попроще, а именно - не спрашивать пароль для sudo операций пользователя jenkins для чего нужно:
+
+    Подключиться к ноде агента: ssh centos@178.154.254.18
+    Выполнить команду sudo visudo
+    Добавить в конец файла строку jenkins  ALL=(ALL) NOPASSWD:ALL
+
+
 8. Отправить ссылку на репозиторий с ролью и Declarative Pipeline и Scripted Pipeline.
 
 [Vector-role2](https://github.com/YTimashev/vector-role2), [Declarative Pipeline](https://github.com/YTimashev/vector-role2/blob/main/pipeline/jenkinsfile), [Scripted Pipeline](pipeline/ScriptedJenkinsfile)
